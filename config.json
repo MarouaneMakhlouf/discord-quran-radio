@@ -1,0 +1,18 @@
+{
+    "token": "bot token",
+    "guild_id": "your guild id",
+    "channel_id": "voice id",
+    "stations": {
+        "yasser_aldosari": "https://backup.qurango.net/radio/yasser_aldosari",
+        "maher_al_meaqli": "https://Qurango.net/radio/maher_al_meaqli",
+        "saud_alshuraim": "https://backup.qurango.net/radio/saud_alshuraim",
+        "mohammed_ayyub": "https://backup.qurango.net/radio/mohammed_ayyub",
+        "khalid_aljileel": "https://Qurango.net/radio/khalid_aljileel",
+        "mishary_alafasi": "https://Qurango.net/radio/mishary_alafasi",
+        "idrees_abkr": "https://backup.qurango.net/radio/idrees_abkr",
+        "ali_jaber": "https://backup.qurango.net/radio/ali_jaber",
+        "nasser_alqatami": "https://backup.qurango.net/radio/nasser_alqatami",
+        "mohammed_allohaidan": "https://backup.qurango.net/radio/mohammed_allohaidan",
+        "abdulrahman_alsudaes": "https://Qurango.net/radio/abdulrahman_alsudaes"
+    }
+}

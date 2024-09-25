@@ -1,0 +1,22 @@
+{
+    "name": "quran-radio-v1",
+    "version": "1.0.0",
+    "description": "Un bot Discord qui joue une radio en streaming MP3.",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "discord.js": "^14.15.3",
+      "@discordjs/voice": "^0.16.1",
+      "@discordjs/opus": "^0.2.0",
+      "node-opus": "^0.3.3",
+      "opusscript": "^0.0.7",
+      "libsodium-wrappers": "^0.7.5"  
+    },
+    "engines": {
+      "node": ">=16.0.0"
+    },
+    "author": "maro dev",
+    "license": "MIT"
+  }
