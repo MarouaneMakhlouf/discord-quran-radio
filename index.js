@@ -7,30 +7,26 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 let connection;
 let player;
 let isPlaying = false;
-let selectedStation = 'https://Qurango.net/radio/abdulrahman_alsudaes'; // المحطة الافتراضية
-let cooldown = false; // لخاصية الـ cooldown
+let selectedStation = 'https://Qurango.net/radio/abdulrahman_alsudaes';
+let cooldown = false;
 
 const stations = config.stations;
 
 client.once(Events.ClientReady, async () => {
     console.log(`Logged in as ${client.user.tag}!`);
-    connectToVoiceChannel(); // الاتصال بالقناة الصوتية عند بدء التشغيل
-
-    // تسجيل أمر /setup
+    connectToVoiceChannel();
+    // /setup
     const commands = [
         new SlashCommandBuilder()
             .setName('setup')
             .setDescription('تكوين القناة الصوتية للراديو')
     ];
-
     const rest = require('@discordjs/rest').REST;
     const { Routes } = require('discord-api-types/v9');
     const restClient = new rest({ version: '9' }).setToken(config.token);
-
     await restClient.put(Routes.applicationGuildCommands(client.user.id, config.guild_id), {
         body: commands,
     });
-
     console.log('أمر /setup تم تسجيله بنجاح!');
 });
 
@@ -42,19 +38,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 .setPlaceholder('اختر محطة الراديو')
                 .addOptions(
                     Object.keys(stations).map(stationKey => ({
-                        label: stationKey.replace('_', ' '), // تحويل underscore إلى مسافة
+                        label: stationKey.replace('_', ' '), 
                         value: stationKey,
                     }))
                 );
-
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
                 .setTitle('اختر محطة الراديو')
                 .setDescription('يرجى اختيار المحطة التي ترغب في تشغيلها.');
-
             const row = new ActionRowBuilder()
                 .addComponents(selectMenu);
-
             await interaction.reply({ embeds: [embed], components: [row] });
         }
     } else if (interaction.isSelectMenu()) {
@@ -63,15 +56,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 await interaction.reply({ content: 'يرجى الانتظار دقيقة قبل تغيير المحطة مرة أخرى.', ephemeral: true });
                 return;
             }
-
             const selected = interaction.values[0];
-            selectedStation = stations[selected]; // تحديث المحطة المختارة
-
+            selectedStation = stations[selected]; 
             if (isPlaying) {
-                playRadio(); // إعادة تشغيل الراديو بالمحطة الجديدة
+                playRadio(); 
             }
-
-            // إعادة تعريف selectMenu هنا
+            // selectMenu 
             const selectMenu = new StringSelectMenuBuilder()
                 .setCustomId('select-station')
                 .setPlaceholder('اختر محطة الراديو')
@@ -81,14 +71,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
                         value: stationKey,
                     }))
                 );
-
             await interaction.update({ content: `تم التبديل إلى المحطة: ${selected}`, components: [new ActionRowBuilder().addComponents(selectMenu)] });
-
-            // تفعيل خاصية الـ cooldown
+            // cooldown
             cooldown = true;
             setTimeout(() => {
                 cooldown = false;
-            }, 60000); // دقيقة واحدة
+            }, 60000); // 1 minuts 
         }
     }
 });
@@ -96,23 +84,19 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 function connectToVoiceChannel() {
     const voiceChannel = client.guilds.cache.get(config.guild_id)?.channels.cache.get(config.channel_id);
-
     if (!voiceChannel) {
         console.error('Canal vocal introuvable.');
         return;
     }
-
     connection = joinVoiceChannel({
         channelId: config.channel_id,
         guildId: config.guild_id,
         adapterCreator: voiceChannel.guild.voiceAdapterCreator,
     });
-
     connection.on(VoiceConnectionStatus.Ready, () => {
         console.log('Le bot est connecté au canal vocal!');
         startRadio();
     });
-
     connection.on(VoiceConnectionStatus.Disconnected, () => {
         console.log('Le bot a été déconnecté du canal vocal.');
         if (isPlaying) stopRadio();
@@ -122,22 +106,18 @@ function connectToVoiceChannel() {
 function startRadio() {
     if (connection) {
         player = createAudioPlayer();
-        playRadio();
-
+        playRadio()
         player.on(AudioPlayerStatus.Idle, () => {
             playRadio();
         });
-
         player.on('error', (error) => {
             console.error('Erreur dans le lecteur audio:', error);
             stopRadio();
         });
-
         client.user.setPresence({
             activities: [{ name: 'Quran Radio', type: ActivityType.Listening }],
             status: 'dnd',
         });
-
         console.log('Radio is now playing.');
         isPlaying = true;
     }
@@ -156,10 +136,8 @@ function stopRadio() {
             activities: [],
             status: 'online',
         });
-
         console.log('Stopped radio.');
         isPlaying = false;
     }
 }
-
 client.login(config.token);
